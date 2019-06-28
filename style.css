@@ -1,0 +1,265 @@
+/**************************HEADER*******************************/
+.header {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    top: 0;
+    height: 70px;
+    background-color:rgba(0, 0, 0, 0);
+    position: fixed;
+    z-index: 999;
+}
+body {
+    overflow: hidden;
+}
+
+.header .header-logo {
+    color: #3867d6;
+    padding-left: 1%;
+    font-family: 'Montserrat', sans-serif;
+    float: left;
+    padding-top: 12.5px;
+    padding-bottom: 12.5px;
+    height: 45px;
+    font-size: 150%;
+    text-decoration: none;
+    transform: translateX(-100rem);
+    animation: slideIn .5s forwards;
+}
+
+nav ul li {
+    float: right;
+    padding-right: 1%;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    height: 30px;
+    transform: translateX(100rem);
+    animation: slideIn .5s forwards;
+
+}
+nav ul li:nth-child(4){
+    animation-delay: 0s;
+}
+nav ul li:nth-child(3){
+    animation-delay: 0.5s;
+}
+nav ul li:nth-child(2){
+    animation-delay: 1s;
+}
+nav ul li:nth-child(1){
+    animation-delay: 1.5s;
+}
+nav ul li a {
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    padding: 0.5rem 0;
+    margin: 0 2rem;
+    position: relative;
+    letter-spacing: 1px;
+}
+nav ul li a:hover {
+    color: #3867d6;
+}
+nav ul li a:last-child{
+    margin-right:0;
+} 
+.header a:hover, .header a:active{
+    text-decoration: none;
+}
+
+.baner {
+    margin-top: -30px;
+}
+.baner .baner-image {
+    width: 100%;
+    position: relative;
+    height: 690px;
+}
+.baner .baner-content {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    top: 35%;
+}
+.baner .baner-content h1 {color: white;}
+.baner .baner-content h2 {color: #f1c40f;}
+ 
+.baner-content .button:hover{
+    transform: scale(1.05);
+}   
+.baner-content .button {
+    transition: transform .5s;
+}
+
+/************************************ ANNIMATION MENU *************************************/
+nav ul li a::before,
+nav ul li a::after{
+content: '';
+position: absolute;
+width:100%;
+height: 2px;
+background-color: red;
+left: 0;
+transform: scaleX(0);
+transition: all .5s;
+}
+nav ul li a::before {
+   top: 0;
+   transform-origin: left; 
+
+}
+nav ul li a::after {
+   bottom: 0;
+   transform-origin: right;
+
+}
+nav ul li a:hover::before,
+nav ul li a:hover::after{
+   transform: scaleX(1);
+}
+@keyframes slideIn {
+    from{
+
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+
+/************************************ SERVICES *************************************/
+.section-header p {
+    width: 300px;
+    margin: auto;
+}
+.section-serv .section-title{
+    text-align: center;
+    font-family: 'Gugi', cursive;
+    margin-top: 5%;
+    font-size: 40px;
+}
+.section .services {
+    width: 30%;
+    height: 25%;
+    text-align: center;
+    float: left;
+    margin-right: 2%;
+    margin-left: 1%;
+    margin-bottom: 3%;
+    background-color: #bdc3c7;
+    border-radius: 3%;
+    moz-border-radius: 3%;
+}
+.services .icon {
+    border-radius: 50%;
+    background-color: #3867d6;
+    color: white;
+    font-size: 40px;
+    width: 60px;
+    height: 60px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-top: 3%;
+}
+.services-title {
+    text-align: center;
+    margin-top: 5%;
+}
+.services-desc {
+    text-align: center;
+    margin-top: 6%; 
+    padding-right: 1%;
+    padding-left: 1%;
+}
+.section-team {
+    margin-top: 20%;
+    
+}
+
+/************************************TEAM WORK******************************/
+.section-team .section-title{
+    text-align: center;
+    font-family: 'Gugi', cursive;
+    margin-top: 5%;
+    font-size: 40px;
+}
+.line {
+    width: 200px;
+    height: 4px;
+    background-color: #7f8c8d;
+    margin:auto;
+}
+.line span {
+    display: block;
+    width: 150px;
+    height: 4px;
+    background-color: #3867d6;
+    margin: auto;
+    position: relative;
+}
+.card .card-img-top {
+    width: 400px;
+    height: 300px;
+}
+.card {
+    margin-top: 3%;
+    margin-left: 5.5%;
+    margin-right: 5.5%;
+    float: left;
+    transition: transform .5s;
+}
+/******************************************* annimation team work ***********************************/
+
+    @keyframes  fadeIn {
+        form{
+            opacity: 0;
+        }
+        to{
+            opacity: 1;
+        }
+    }
+        .card:nth-of-type(1){
+            animation:fadeIn .5s .5s backwards;
+        }
+        .card:nth-of-type(2){
+            animation:fadeIn .5s 1s backwards;
+        }
+        .card:nth-of-type(3){
+            animation:fadeIn .5s 1.5s backwards;
+        }
+   .card:hover{
+       transform: scale(1.05);
+   }     
+
+/******************************************* THE END ***********************************/
+.form {
+    padding-top: 3%;
+    
+}
+.last-page {
+    background-color: black;
+    margin-top: 50%;
+    height: 350px;
+    bottom: 0;
+    
+}
+.form-group {
+    width: 20%;
+    margin-left: 70%;
+}
+.form-text {
+    color: white;
+}
+.btn-last {
+    margin-left: 70%;
+    
+}
+
+.last-page .social-media .media {
+    float: left;
+    padding-left: 5%;
+    list-style: none;
+}
+.all-media {
+    padding-left: 10%;
+}
