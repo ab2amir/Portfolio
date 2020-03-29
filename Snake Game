@@ -1,181 +1,155 @@
-import turtle
-import time
-import random
-
-delay = 0.1
-
-# Score
-score = 0
-high_score = 0
+import numpy
+import pygame
 
 
-# set un the screen
-
-wn = turtle.Screen()
-wn.title("Snake Game by @Abdou")
-wn.bgcolor("orange")
-wn.setup(width=600, height=600)
-# turns off the screen updats
-wn.tracer(0)
-
-# snake head
-head = turtle.Turtle()
-head.speed(0)
-head.shape("square")
-head.color("black")
-head.penup()
-head.goto(0, 0)
-head.direction = "stop"
-
-# Snake food +10
-food = turtle.Turtle()
-food.speed(0)
-food.shape("circle")
-food.color("green")
-food.penup()
-food.goto(0, 100)
-
-segments = []
-
-# Pen
-pen = turtle.Turtle()
-pen.speed(0)
-pen.shape("square")
-pen.color("white")
-pen.penup()
-pen.hideturtle()
-pen.goto(0, 260)
-pen.write("Score: 0 High Score: 0", align="center", font=("courier", 24, "normal"))
+# Class for location of icons
+class IconLocation(pygame.sprite.Sprite):
+    def __init__(self, pos_x, pos_y, icon):
+        super().__init__()
+        self.image = pygame.image.load('Assets/'+icon+'.png')
+        self.rect = self.image.get_rect()
+        self.rect.x = pos_x
+        self.rect.y = pos_y
+    def set_image(self, image):
+        self.image = image
 
 
-# Functions
-def go_up():
-    if head.direction != "down":
-        head.direction = "up"
-def go_down():
-    if head.direction != "up":
-        head.direction = "down"
-def go_left():
-    if head.direction != "right":
-        head.direction = "left"
-def go_right():
-    if head.direction != "left":
-        head.direction = "right"
-def move():
-    if head.direction == "up":
-        y = head.ycor()
-        head.sety(y + 20)
-    if head.direction == "down":
-        y = head.ycor()
-        head.sety(y - 20)
-    if head.direction == "left":
-        x = head.xcor()
-        head.setx(x - 20)
-    if head.direction == "right":
-        x = head.xcor()
-        head.setx(x + 20)
+def start():
+    global total_coins
+    # Generate three Random icons
+    rand_icons = numpy.random.choice(icons, 3, p=icons_proba)
+    # Draw the random icons on the correct location
+    loc_left.set_image(icon_dict[rand_icons[0]])
+    loc_middle.set_image(icon_dict[rand_icons[1]])
+    loc_right.set_image(icon_dict[rand_icons[2]])
 
-# keyboard bindings
-wn.listen()
-wn.onkeypress(go_up, "z")
-wn.onkeypress(go_down, "s")
-wn.onkeypress(go_left, "q")
-wn.onkeypress(go_right, "d")
+    # Reward if there are Three identical icons
+    if rand_icons[0] == rand_icons[1] == rand_icons[2]:
+        # Get reward from a dict
+        coins = icon_reward_dict[rand_icons[0]]
+        total_coins += coins
 
 
+# Setup the window
+pygame.init()
+width = 700
+height = 550
+screen = pygame.display.set_mode((width, height))
+pygame.display.set_caption("Slot Machine Game @Ab Amir TV")
+logo = pygame.image.load('Assets/Slot-Machine.png')
+pygame.display.set_icon(logo)
+white = [255, 255, 255]
+screen.fill(white)
+
+# Load background image
+background = pygame.image.load('Assets/Slot-Machine.png')
+police_total_coins = pygame.font.SysFont("Comic Sans MS", 50)
+police_menu = pygame.font.SysFont("Comic Sans MS", 25)
 
 
-
-# Main game loop
-while True:
-    wn.update()
-    # Check for collision with the head
-    if head.xcor()>290 or head.xcor()<-290 or head.ycor()>290 or head.ycor()<-290:
-        time.sleep(1)
-        head.goto(0, 0)
-        head.direction = "stop"
-
-        # Hide the segment list
-        for seg in segments:
-            seg.goto(1000, 1000)
-
-        # Clear the segment
-        segments.clear()
-
-        # Reset the score
-        score = 0
-        pen.clear()
-        pen.write("Score: {}  High Score: {}".format(score, high_score), align="center", font=("courier", 24, "normal"))
-
-        # Reset the delay
-        delay = 0.1
-
-    # Check for collision with food
-    if head.distance(food) < 20:
-        # Move the food on random spot
-        x = random.randint(-290, 290)
-        y = random.randint(-290, 290)
-        food.goto(x, y)
-
-        # Add a segment
-        new_segment = turtle.Turtle()
-        new_segment.speed(0)
-        new_segment.shape("square")
-        new_segment.color("gray")
-        new_segment.penup()
-        segments.append(new_segment)
-
-        # Shorten the delay (speed ++)
-        delay -= 0.001
-
-        # Increase the score
-        score += 10
-        if score > high_score:
-            high_score = score
-        pen.clear()
-        pen.write("Score: {}  High Score: {}".format(score, high_score), align="center", font=("courier", 24, "normal"))
-
-    # Move the end segments first in reverse order
-    for i in range(len(segments)-1, 0, -1):
-        x = segments[i-1].xcor()
-        y = segments[i-1].ycor()
-        segments[i].goto(x, y)
-    # Move segment 0 to where the head is
-    if len(segments) > 0:
-        x = head.xcor()
-        y = head.ycor()
-        segments[0].goto(x, y)
+# Coins of the player
+total_coins = 500
 
 
-    move()
-
-    # Check for head collision with the body segments
-    for seg in segments:
-        if seg.distance(head) < 20:
-            time.sleep(1)
-            head.goto(0, 0)
-            head.direction = "stop"
-
-            # Rest the score
-            score = 0
-            pen.clear()
-            pen.write("Score: {}  High Score: {}".format(score, high_score), align="center",font=("courier", 24, "normal"))
-
-            # Hide the segment list
-            for seg in segments:
-                seg.goto(1000, 1000)
-
-            # Clear the segment
-            segments.clear()
-
-            # Reset the delay
-            delay = 0.1
+# Dict for every icon associate to an image
+icon_dict = {
+    "Facebook": pygame.image.load('Assets/facebook.png'),
+    "Instagram": pygame.image.load('Assets/instagram.png'),
+    "Twitter": pygame.image.load('Assets/twitter.png'),
+    "LinkedIn": pygame.image.load('Assets/linkedin.png'),
+    "Youtube": pygame.image.load('Assets/youtube.png')
+}
 
 
+# Load location icons
+# No equation to do location just try and adjust
+height_location = height / 2 - 13
+Locations = pygame.sprite.Group()
+loc_left = IconLocation(102, height_location, 'instagram')
+loc_middle = IconLocation(192, height_location, 'twitter')
+loc_right = IconLocation(282, height_location, 'linkedin')
 
-    time.sleep(delay)
+# Group locations
+Locations.add(loc_left)
+Locations.add(loc_middle)
+Locations.add(loc_right)
+
+# Location of icons menu
+width_location_menu = height / 2 - 13
+Location_menu = pygame.sprite.Group()
+first_loc = IconLocation(480, 200, 'youtube')
+second_loc = IconLocation(480, 260, 'linkedin')
+third_loc = IconLocation(480, 330, 'facebook')
+fourth_loc = IconLocation(480, 400, 'instagram')
+fifth_loc = IconLocation(480, 466, 'twitter')
+
+# Group location_menu
+Location_menu.add(first_loc)
+Location_menu.add(second_loc)
+Location_menu.add(third_loc)
+Location_menu.add(fourth_loc)
+Location_menu.add(fifth_loc)
+
+# Stock the social media icons in list
+# Youtube = Jackpot +200 coins
+icons = ["Facebook", "Instagram", "Twitter", "LinkedIn", "Youtube"]
+# Probability of every icon to appear
+icons_proba = [0.2, 0.25, 0.35, 0.15, 0.05]
+
+# Stock on dict every icon with that raward
+icon_reward_dict = {
+    "Facebook": 25,
+    "Instagram": 20,
+    "Twitter": 15,
+    "LinkedIn": 35,
+    "Youtube": 200
+}
+
+run = True
+while run:
+    screen.fill(white)
+    # Make the background iamge
+    screen.blit(background, (0, 0))
+    # Print the coins of the player
+    text = police_total_coins.render("Total "+str(total_coins)+"$", True, (0, 0, 0))
+    screen.blit(text, (400, 0))
+
+    # Print menu reward for each icon
+    yt_menu = police_menu.render("X3   +200$ ", True, (0, 0, 0))
+    screen.blit(yt_menu, (550, 215))
+    lk_menu = police_menu.render("X3   +35$ ", True, (0, 0, 0))
+    screen.blit(lk_menu, (550, 275))
+    fb_menu = police_menu.render("X3   +25$ ", True, (0, 0, 0))
+    screen.blit(fb_menu, (550, 345))
+    insta_menu = police_menu.render("X3   +20$ ", True, (0, 0, 0))
+    screen.blit(insta_menu, (550, 415))
+    tw_menu = police_menu.render("X3   +15$ ", True, (0, 0, 0))
+    screen.blit(tw_menu, (550, 480))
+    # Print the price of 1 ticket
+    ticket = police_menu.render("X1   -15$ ", True, (250, 0, 0))
+    screen.blit(ticket, (170, 405))
+
+    # Draw icon image
+    Locations.draw(screen)
+    # Draw icon image for menu
+    Location_menu.draw(screen)
+    # Update screen
+    pygame.display.flip()
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+            quit()
+        # check if key is pressed
+        if event.type == pygame.KEYDOWN:
+            # 1 click = 1 try = -15$
+            if total_coins >= 15:
+                total_coins -= 15
+                start()
 
 
 
 
-wn.mainloop()
+
+
+
+
